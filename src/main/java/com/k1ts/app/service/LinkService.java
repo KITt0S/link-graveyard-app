@@ -49,7 +49,12 @@ public class LinkService {
 
     public void openLink(Link link) {
         try {
-            Desktop.getDesktop().browse(URI.create(link.getUrl()));
+            String url = link.getUrl();
+            new ProcessBuilder(
+                    "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+                    "--incognito",
+                    url
+            ).start();
             link.incrementOpenCount();
             repository.update(link);
         } catch (Exception e) {
