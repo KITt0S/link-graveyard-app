@@ -203,4 +203,28 @@ public class LinkService {
                         score.getScore()))
                 .orElse(new BiggestLie("none", 0, 0, 0));
     }
+
+    public DigitalPersonality calculatePersonality() {
+        Statistics statistics = calculateStatistics();
+
+        double openRate = statistics.getOpenRate();
+
+        if (openRate < 0.10) {
+            return new DigitalPersonality("Graveyard Keeper", "You collect links and rarely return to them.");
+        }
+
+        if (openRate < 0.25) {
+            return new DigitalPersonality("Digital Hoarder", "You save much more than you consume.");
+        }
+
+        if (openRate < 0.50) {
+            return new DigitalPersonality("Curious Collector", "You explore many ideas and revisit some of them.");
+        }
+
+        if (openRate < 0.75) {
+            return new DigitalPersonality("Intentional Reader", "Most saved links eventually get your attention.");
+        }
+
+        return new DigitalPersonality("Link Assassin", "Very few saved links escape your attention.");
+    }
 }

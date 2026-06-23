@@ -1,6 +1,7 @@
 package com.k1ts.app.service;
 
 import com.k1ts.app.model.BiggestLie;
+import com.k1ts.app.model.DigitalPersonality;
 import com.k1ts.app.model.Link;
 import com.k1ts.app.persistence.InMemoryLinkRepository;
 import org.junit.jupiter.api.Test;
@@ -72,5 +73,35 @@ class LinkServiceTest {
         LinkService service = new LinkService(repository);
         BiggestLie lie = service.calculateBiggestLie();
         assertEquals("none", lie.getDomain());
+    }
+
+    @Test
+    void shouldReturnGraveyardKeeperPersonality() {
+        InMemoryLinkRepository repository = new InMemoryLinkRepository();
+        LinkService service = new LinkService(repository);
+
+        repository.save(new Link(
+                "https://youtube.com/a",
+                "youtube.com",
+                LocalDateTime.now(),
+                0,
+                1));
+
+        repository.save(new Link(
+                "https://youtube.com/b",
+                "youtube.com",
+                LocalDateTime.now(),
+                0,
+                1));
+
+        repository.save(new Link(
+                "https://youtube.com/c",
+                "youtube.com",
+                LocalDateTime.now(),
+                0, 1));
+
+        DigitalPersonality personality = service.calculatePersonality();
+
+        assertEquals("Graveyard Keeper", personality.getTitle());
     }
 }

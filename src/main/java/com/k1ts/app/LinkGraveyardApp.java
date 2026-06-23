@@ -14,7 +14,6 @@ public class LinkGraveyardApp {
     public static void main(String[] args) {
 
         JsonLinkRepository repository = new JsonLinkRepository(Path.of("data", "links.json"));
-
         LinkService linkService = new LinkService(repository);
 
         SwingUtilities.invokeLater(() -> {
