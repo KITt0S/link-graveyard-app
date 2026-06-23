@@ -64,6 +64,7 @@ public class MainController implements ClipboardListener {
             mainFrame.setShameList(linkService.getDailyShameList());
             mainFrame.setDomainScores(linkService.calculateDomainScores());
             mainFrame.setBiggestLie(linkService.calculateBiggestLie());
+            mainFrame.setPersonality(linkService.calculatePersonality());
         });
     }
 }

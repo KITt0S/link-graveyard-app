@@ -1,6 +1,7 @@
 package com.k1ts.app.view;
 
 import com.k1ts.app.model.BiggestLie;
+import com.k1ts.app.model.DigitalPersonality;
 import com.k1ts.app.model.DomainScore;
 import com.k1ts.app.model.Link;
 
@@ -23,6 +24,8 @@ public class MainFrame extends JFrame {
     private final JLabel biggestLieSavedLabel;
     private final JLabel biggestLieOpenedLabel;
     private final JLabel biggestLieRateLabel;
+    private final JLabel personalityTitleLabel;
+    private final JLabel personalityDescriptionLabel;
 
     private final JButton refreshButton;
 
@@ -53,6 +56,8 @@ public class MainFrame extends JFrame {
         biggestLieSavedLabel = new JLabel("Saved: 0");
         biggestLieOpenedLabel = new JLabel("Opened: 0");
         biggestLieRateLabel = new JLabel("Success Rate: 0%");
+        personalityTitleLabel = new JLabel("-");
+        personalityDescriptionLabel = new JLabel("-");
 
         refreshButton = new JButton("Refresh");
 
@@ -93,22 +98,27 @@ public class MainFrame extends JFrame {
 
         root.add(topPanel, BorderLayout.NORTH);
 
-        JPanel biggestLiePanel = new JPanel();
-        biggestLiePanel.setLayout(new BoxLayout(biggestLiePanel, BoxLayout.Y_AXIS));
-        biggestLiePanel.setBorder(BorderFactory.createTitledBorder("🤥 Biggest Lie You Told Yourself"));
-
-        biggestLiePanel.add(biggestLieDomainLabel);
-        biggestLiePanel.add(biggestLieSavedLabel);
-        biggestLiePanel.add(biggestLieOpenedLabel);
-        biggestLiePanel.add(biggestLieRateLabel);
-
         JSplitPane splitPane = new JSplitPane();
 
         splitPane.setDividerLocation(950);
 
         splitPane.setLeftComponent(new JScrollPane(linksTable));
 
-        JPanel rightPanel = new JPanel(new GridLayout(4, 1));
+        JPanel rightPanel = new JPanel(new GridLayout(5, 1));
+
+        JPanel personalityPanel = new JPanel();
+        personalityPanel.setLayout(new BoxLayout(personalityPanel, BoxLayout.Y_AXIS));
+        personalityPanel.setBorder(BorderFactory.createTitledBorder("🎭 Digital Personality"));
+        personalityPanel.add(personalityTitleLabel);
+        personalityPanel.add(personalityDescriptionLabel);
+
+        JPanel biggestLiePanel = new JPanel();
+        biggestLiePanel.setLayout(new BoxLayout(biggestLiePanel, BoxLayout.Y_AXIS));
+        biggestLiePanel.setBorder(BorderFactory.createTitledBorder("🤥 Biggest Lie You Told Yourself"));
+        biggestLiePanel.add(biggestLieDomainLabel);
+        biggestLiePanel.add(biggestLieSavedLabel);
+        biggestLiePanel.add(biggestLieOpenedLabel);
+        biggestLiePanel.add(biggestLieRateLabel);
 
         JPanel shamePanel = new JPanel(new BorderLayout());
         shamePanel.add(new JLabel("🔥 Daily Shame List"), BorderLayout.NORTH);
@@ -119,15 +129,14 @@ public class MainFrame extends JFrame {
         bestPanel.add(new JScrollPane(bestDomainsList), BorderLayout.CENTER);
 
         JPanel worstPanel = new JPanel(new BorderLayout());
-
         worstPanel.add(new JLabel("💀 Worst Domains"), BorderLayout.NORTH);
-
         worstPanel.add(new JScrollPane(worstDomainsList), BorderLayout.CENTER);
 
+        rightPanel.add(personalityPanel);
+        rightPanel.add(biggestLiePanel);
         rightPanel.add(shamePanel);
         rightPanel.add(bestPanel);
         rightPanel.add(worstPanel);
-        rightPanel.add(biggestLiePanel);
 
         splitPane.setRightComponent(rightPanel);
 
@@ -190,6 +199,11 @@ public class MainFrame extends JFrame {
         biggestLieSavedLabel.setText("Saved: " + lie.getSavedCount());
         biggestLieOpenedLabel.setText("Opened: " + lie.getOpenedCount());
         biggestLieRateLabel.setText(String.format("Success Rate: %.1f%%", lie.getSuccessRate() * 100));
+    }
+
+    public void setPersonality(DigitalPersonality personality) {
+        personalityTitleLabel.setText(personality.getTitle());
+        personalityDescriptionLabel.setText(personality.getDescription());
     }
 
     public Link getSelectedLink() {
