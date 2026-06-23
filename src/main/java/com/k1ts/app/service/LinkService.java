@@ -1,9 +1,6 @@
 package com.k1ts.app.service;
 
-import com.k1ts.app.model.DomainScore;
-import com.k1ts.app.model.Link;
-import com.k1ts.app.model.LinkRepository;
-import com.k1ts.app.model.Statistics;
+import com.k1ts.app.model.*;
 
 import java.awt.Desktop;
 import java.net.URI;
@@ -190,5 +187,21 @@ public class LinkService {
         scores.sort(Comparator.comparing(DomainScore::getScore).reversed());
 
         return scores;
+    }
+
+    public BiggestLie calculateBiggestLie() {
+        List<DomainScore> scores = calculateDomainScores();
+
+        return scores
+                .stream()
+                .filter(score -> score.getSavedCount() >= 3)
+                .min(Comparator.comparing(DomainScore::getScore))
+                .map(score -> new BiggestLie(
+                        score.getDomain(),
+                        score.getSavedCount(),
+                        score.getOpenedCount(),
+                        score.getScore())
+                )
+                .orElse(new BiggestLie("none", 0, 0, 0));
     }
 }
