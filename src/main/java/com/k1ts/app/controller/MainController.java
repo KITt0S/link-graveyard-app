@@ -50,12 +50,9 @@ public class MainController implements ClipboardListener {
     }
 
     private void refreshView() {
-        Statistics statistics = linkService.calculateStatistics();
-        List<Link> links = linkService.getAllLinks();
-        List<Link> shame = linkService.getDailyShameList();
-        List<DomainScore> domainScores = linkService.calculateDomainScores();
-
         SwingUtilities.invokeLater(() -> {
+            Statistics statistics = linkService.calculateStatistics();
+
             mainFrame.setStatistics(
                     statistics.getTotalLinks(),
                     statistics.getOpenedLinks(),
@@ -63,9 +60,10 @@ public class MainController implements ClipboardListener {
                     statistics.getOpenRate(),
                     statistics.getForgottenLinks());
 
-            mainFrame.setLinks(links);
-            mainFrame.setShameList(shame);
-            mainFrame.setDomainScores(domainScores);
+            mainFrame.setLinks(linkService.getAllLinks());
+            mainFrame.setShameList(linkService.getDailyShameList());
+            mainFrame.setDomainScores(linkService.calculateDomainScores());
+            mainFrame.setBiggestLie(linkService.calculateBiggestLie());
         });
     }
 }

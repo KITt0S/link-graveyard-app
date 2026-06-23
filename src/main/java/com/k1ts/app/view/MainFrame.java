@@ -1,5 +1,6 @@
 package com.k1ts.app.view;
 
+import com.k1ts.app.model.BiggestLie;
 import com.k1ts.app.model.DomainScore;
 import com.k1ts.app.model.Link;
 
@@ -18,6 +19,10 @@ public class MainFrame extends JFrame {
     private final JLabel ignoredLinksLabel;
     private final JLabel openRateLabel;
     private final JLabel forgottenLinksLabel;
+    private final JLabel biggestLieDomainLabel;
+    private final JLabel biggestLieSavedLabel;
+    private final JLabel biggestLieOpenedLabel;
+    private final JLabel biggestLieRateLabel;
 
     private final JButton refreshButton;
 
@@ -44,6 +49,10 @@ public class MainFrame extends JFrame {
         ignoredLinksLabel = new JLabel("Ignored: 0");
         openRateLabel = new JLabel("Open rate: 0%");
         forgottenLinksLabel = new JLabel("Forgotten: 0");
+        biggestLieDomainLabel = new JLabel("Domain: -");
+        biggestLieSavedLabel = new JLabel("Saved: 0");
+        biggestLieOpenedLabel = new JLabel("Opened: 0");
+        biggestLieRateLabel = new JLabel("Success Rate: 0%");
 
         refreshButton = new JButton("Refresh");
 
@@ -84,13 +93,22 @@ public class MainFrame extends JFrame {
 
         root.add(topPanel, BorderLayout.NORTH);
 
+        JPanel biggestLiePanel = new JPanel();
+        biggestLiePanel.setLayout(new BoxLayout(biggestLiePanel, BoxLayout.Y_AXIS));
+        biggestLiePanel.setBorder(BorderFactory.createTitledBorder("🤥 Biggest Lie You Told Yourself"));
+
+        biggestLiePanel.add(biggestLieDomainLabel);
+        biggestLiePanel.add(biggestLieSavedLabel);
+        biggestLiePanel.add(biggestLieOpenedLabel);
+        biggestLiePanel.add(biggestLieRateLabel);
+
         JSplitPane splitPane = new JSplitPane();
 
         splitPane.setDividerLocation(950);
 
         splitPane.setLeftComponent(new JScrollPane(linksTable));
 
-        JPanel rightPanel = new JPanel(new GridLayout(3, 1));
+        JPanel rightPanel = new JPanel(new GridLayout(4, 1));
 
         JPanel shamePanel = new JPanel(new BorderLayout());
         shamePanel.add(new JLabel("🔥 Daily Shame List"), BorderLayout.NORTH);
@@ -109,6 +127,7 @@ public class MainFrame extends JFrame {
         rightPanel.add(shamePanel);
         rightPanel.add(bestPanel);
         rightPanel.add(worstPanel);
+        rightPanel.add(biggestLiePanel);
 
         splitPane.setRightComponent(rightPanel);
 
@@ -164,6 +183,13 @@ public class MainFrame extends JFrame {
                                 "%s (%.0f%%)",
                                 score.getDomain(),
                                 score.getScore() * 100)));
+    }
+
+    public void setBiggestLie(BiggestLie lie) {
+        biggestLieDomainLabel.setText("Domain: " + lie.getDomain());
+        biggestLieSavedLabel.setText("Saved: " + lie.getSavedCount());
+        biggestLieOpenedLabel.setText("Opened: " + lie.getOpenedCount());
+        biggestLieRateLabel.setText(String.format("Success Rate: %.1f%%", lie.getSuccessRate() * 100));
     }
 
     public Link getSelectedLink() {

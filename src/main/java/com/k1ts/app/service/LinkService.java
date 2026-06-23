@@ -200,8 +200,7 @@ public class LinkService {
                         score.getDomain(),
                         score.getSavedCount(),
                         score.getOpenedCount(),
-                        score.getScore())
-                )
+                        score.getScore()))
                 .orElse(new BiggestLie("none", 0, 0, 0));
     }
 }
